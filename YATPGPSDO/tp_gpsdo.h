@@ -7,9 +7,8 @@
 /*
    Configuration section
 */
-//#define DEBUG             // compile debug code
 
-#define VERSION "V1.02 2021/02/20"
+#define VERSION "V1.03 2021/02/23"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 

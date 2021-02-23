@@ -60,13 +60,9 @@ bool GetGPSMsg() {
 void ProcessGPSMsg() {
   int i = 1;
   int parn = 0;
-#ifdef DEBUG
-  Serial3.println(GPSmsg);
-#endif // DEBUG
+
   if (GPSmsg[0] != '$') {
-#ifdef DEBUG
-    Serial3.println("GPS message without starting $ ?");
-#endif // DEBUG
+
     return;
   }
   refresh = true;
@@ -90,9 +86,7 @@ void ProcessGPSMsg() {
   if (strcmp(&GPSmsg[1], "GETVER") == 0) {
     if (strcmp(params[1], "BOOT") == 0) {
       Serial2.println("$PROCEED");
-#ifdef DEBUG
-      Serial3.println("Sending $PROCEED command");
-#endif // DEBUG     
+   
       gpsdoStatus.TPversion[0] = 0;
       strncpy(gpsdoStatus.TPversion, params[0], 10);
       gpsdoStatus.TPversion[10] = 0;
@@ -175,9 +169,7 @@ void ProcessGPSMsg() {
   if (strcmp(&GPSmsg[1], "SET1PPS") == 0) {
     return;
   }
-#ifdef DEBUG
-  Serial3.println("Unknown GPS message");
-#endif // DEBUG
+
   refresh = false;
 }
 

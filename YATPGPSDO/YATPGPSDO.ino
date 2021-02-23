@@ -33,10 +33,6 @@ struct CONFIG gpsdoConfig;      // COnfiguration settings
 
 char GPSmsg[MSGMAX];            // buffer for TruePosition messages
 
-#ifdef DEBUG
-int Outgoing;
-#endif // DEBUG
-
 bool refresh = false;           // do we need to redraw the display?
 
 unsigned long lastMsgTime, periodicMsgTime, blinkTime, backlTime; // timers for messages, blinking and backlight
@@ -58,13 +54,11 @@ void setup() {
      Set up software serial port to GPSDO.
 
      Serial2 for TruePosition communications
-     Serial3 for debug output if debugging is enabled
+
   */
 
   Serial2.begin(GPSDO_BAUD);
-#ifdef DEBUG
-  Serial3.begin(SERIAL_BAUD);
-#endif //DEBUG
+
   /*
      Set up button inputs with pull-up
   */
@@ -103,12 +97,6 @@ void loop() {
       gpsdoAlerts.nogps = false;
     }
 
-#ifdef DEBUG
-    if (Serial3.available() > 0) {
-      Outgoing = Serial3.read();
-      Serial2.write(Outgoing);
-    }
-#endif //DEBUG
     /*
        This will detect if there is no message from the GPS for longer than NOMSGTIME
        If triggered, it will cause a GPS lost alert.
