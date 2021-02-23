@@ -95,7 +95,8 @@ void ProcessGPSMsg() {
       gpsdoAlerts.tenmhz = true;
       gpsdoAlerts.onepps = true;
       gpsdoStatus.status = 24;
-      gpsdoInitialized = false;
+      gpsdoStatus.initialized = false;
+      gpsdoStatus.surveyed = false;
       initPPSDBG = false;
 
     }
@@ -105,7 +106,7 @@ void ProcessGPSMsg() {
   /*
      Send the PPSDBG command to periodically provide additional status
   */
-  if (!gpsdoInitialized) {
+  if (!gpsdoStatus.initialized) {
     if (!initPPSDBG) {
       Serial2.println("$PPSDBG 1");
       initPPSDBG = true;
@@ -125,7 +126,7 @@ void ProcessGPSMsg() {
 
   if (strcmp(&GPSmsg[1], "STATUS") == 0) {
 
-    gpsdoInitialized = true;                           // after first STATUS we consider the GPSDO fully initilaized and working
+    gpsdoStatus.initialized = true;                           // after first STATUS we consider the GPSDO fully initilaized and working
     gpsdoAlerts.tenmhz = (gpsdoStatus.tenmhz = atoi(params[0]));
     gpsdoAlerts.onepps = (gpsdoStatus.onepps = atoi(params[1]));
     gpsdoAlerts.antenna = (gpsdoStatus.antenna = atoi(params[2]));
@@ -141,6 +142,10 @@ void ProcessGPSMsg() {
     gpsdoStatus.tsats = atoi(params[1]);
     gpsdoStatus.dop = atoi(params[2]);
     gpsdoStatus.temp = atof(params[3]);
+
+    if (!gpsdoStatus.surveyed && gpsdoStatus.surveying) {
+      gpsdoStatus.surveyed=true;
+    }
     return;
   }
 

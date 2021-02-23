@@ -52,7 +52,7 @@ void PressBtnMode(int len) {
     nextDisplay();
   }
   else {
-    ;
+    ;                           // We don't have long press on Mode
   }
 }
 

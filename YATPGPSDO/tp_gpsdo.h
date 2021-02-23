@@ -8,7 +8,7 @@
    Configuration section
 */
 
-#define VERSION "V1.03 2021/02/23"
+#define VERSION "V1.04 2021/02/23"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -101,9 +101,11 @@ struct STATUS {
   bool antenna;             // Antenna is correctly connected.
   int holdover;             // Holdover time
   int status;               // TruePosition status
+  bool initialized;         // Has the TruePosition booted up?
   int nsats;                // Number of sats seen
   int tsats;                // Number of sats tracked
   bool surveying;           // Survey is in progress
+  bool surveyed;            // survey wasrun since lt reboot
   int dop;                  // DOP value
   float temp;                 // Temperature of the unit
   long lat;                 // Latitude

@@ -8,7 +8,7 @@
   Display: 128x64 ST7920 based bitmap display
 
   Additional libraries: Time and U8G2
-  
+
 */
 /*
    Main program for the TruePosition GPSDO
@@ -21,8 +21,6 @@
 #include <Wire.h>
 
 #include "TP_GPSDO.h"
-
-
 
 struct CLOCK gpsdoClock;        // Clock related data
 struct STATUS gpsdoStatus;      // Everything about the status of the GPSDO
@@ -42,11 +40,9 @@ enum DisplayModes displayMode = STATUS;                           // current dis
 enum MenuModes menuMode = SETSURVEY;                              // current menu mode
 bool heartBeat = false;                                           // heart beat led
 bool initPPSDBG = false;                                          // PPSDBG command sent at init
-bool gpsdoInitialized = false;                                    // TruePosition is up, true if at least one STATUS msg is received
 int surveySetTime = 1;                                            // Default survey time
 bool inAlert = false;                                             // is there any alert?
 bool blink;                                                       // The global blink used for any kind of blinking
-
 
 void setup() {
 
@@ -81,6 +77,7 @@ void setup() {
   EEPROM.init();
   gpsdoStatus.status = 24;
   gpsdoAlerts.tenmhz = gpsdoAlerts.onepps = true;
+  gpsdoStatus.surveyed = false;
   periodicMsgTime = lastMsgTime = blinkTime = backlTime = millis();
   SetupDisplay();
   readConfig();
@@ -106,9 +103,11 @@ void loop() {
       gpsdoAlerts.tenmhz = true;
       gpsdoAlerts.onepps = true;
       gpsdoStatus.status = 24;
-      gpsdoInitialized = false;
+      gpsdoStatus.initialized = false;
+      gpsdoStatus.surveyed = false;
       initPPSDBG = false;
     }
+    
     /*
        We force the GPS to provide position report every PERIODICMSG time
        TruePosition normally only reports position during survey.

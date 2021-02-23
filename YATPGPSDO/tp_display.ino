@@ -33,15 +33,15 @@ char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //
 /*
    Various bitmaps for the status bar on the main page
 */
-uint8_t bitmapAnt[] = {16, 146, 84, 56, 16, 16, 16, 16, 16, 16, 16};
-uint8_t bitmapIAnt[] = {170, 84, 170, 84, 170, 84, 170, 84, 170, 84, 170};
-uint8_t bitmap10MHz[] = {73, 84, 0, 213, 213, 224, 85, 92, 64, 85, 84, 128, 73, 85, 224};
-uint8_t bitmapI10MHz[] = {170, 170, 170, 85, 85, 85, 170, 170, 170, 85, 85, 85, 170, 170, 170};
-uint8_t bitmap1PPS[] = {89, 140, 213, 80, 89, 136, 81, 4, 81, 24};
-uint8_t bitmapI1PPS[] = {170, 170, 85, 84, 170, 170, 85, 84, 170, 170};
-uint8_t bitmapSurv1[] = {16, 16, 16, 16, 16, 254, 124, 56, 16, 255};
-uint8_t bitmapSurv2[] = {16, 254, 124, 56, 16, 0, 0, 0, 0, 255};
-uint8_t bitmapNormal[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};
+uint8_t bitmapAnt[] = {16, 146, 84, 56, 16, 16, 16, 16, 16, 16, 16};              // Antenna symbol
+uint8_t bitmapIAnt[] = {170, 84, 170, 84, 170, 84, 170, 84, 170, 84, 170};        // Checkerboard for antenna error
+uint8_t bitmap10MHz[] = {73, 84, 0, 213, 213, 224, 85, 92, 64, 85, 84, 128, 73, 85, 224};       // 10Mhz
+uint8_t bitmapI10MHz[] = {170, 170, 170, 85, 85, 85, 170, 170, 170, 85, 85, 85, 170, 170, 170}; // Bad 10Mhz
+uint8_t bitmap1PPS[] = {89, 140, 213, 80, 89, 136, 81, 4, 81, 24};                // 1 PPS
+uint8_t bitmapI1PPS[] = {170, 170, 85, 84, 170, 170, 85, 84, 170, 170};           // Bad 1PPS
+uint8_t bitmapSurv1[] = {16, 16, 16, 16, 16, 254, 124, 56, 16, 254};              // Survey needed
+uint8_t bitmapSurv2[] = {16, 254, 124, 56, 16, 0, 0, 0, 0, 254};                  // Animation during survey
+uint8_t bitmapSurveyed[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};           // Location has been surveyed
 
 /*
    Initialize the display. It is in HW SPI mode, so uses the HW SPI pins
@@ -147,8 +147,8 @@ void displayStatusPage() { // General status
      Lock and holdover duration if applicable
      Number of satellites, DOP, DAC value and temperature.
   */
-  if (gpsdoInitialized) {
-    u8g2.drawBitmap(85, 0, 1, 10, gpsdoStatus.surveying ? blink ? bitmapSurv1 : bitmapSurv2 : bitmapNormal);
+  if (gpsdoStatus.initialized) {
+    u8g2.drawBitmap(85, 0, 1, 10, gpsdoStatus.surveying ? blink ? bitmapSurv1 : bitmapSurv2 : gpsdoStatus.surveyed ? bitmapSurveyed : bitmapSurv1);
     u8g2.setCursor(0, 27);
     u8g2.setFont(u8g2_font_profont17_tf);
     printTime();
@@ -171,7 +171,7 @@ void displayStatusPage() { // General status
 
     u8g2.setCursor(0, 58);
     u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac,6); u8g2.print("V");
-    u8g2.print(" Temp:"); u8g2.println(gpsdoStatus.temp,2); u8g2.print("C");
+    u8g2.print("  T:"); u8g2.println(gpsdoStatus.temp,2); u8g2.print("°C");
   } else {
 
     /*
@@ -254,7 +254,7 @@ void displaySatsPage() {
   for (i = 0; i < NUMSAT; i++)
     if (gpsdoSats[i].snr > 0) {
       u8g2.setCursor(67, row);
-      u8g2.drawLine(64, row, 64, row - (gpsdoSats[i].snr - 30) / 2);
+      u8g2.drawLine(64, row, 64, row - (gpsdoSats[i].snr - 30) / 2);      // Fix me for small and large values
       row += 7;
       u8g2.print(i);
       u8g2.print(":");
@@ -336,6 +336,7 @@ void displayPosPage() {
   u8g2.print(gpsdoStatus.nsats);
   u8g2.print("/");
   u8g2.println(gpsdoStatus.tsats);
+  
   u8g2.setCursor(0, 60);
   u8g2.setFont(u8g2_font_profont10_tf);
   if (menuMode == SHOWSURVEY) {
