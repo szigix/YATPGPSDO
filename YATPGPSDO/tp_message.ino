@@ -5,7 +5,7 @@
 
 */
 /*
-   This file contains mosst of he code to process the messages from the TruePosition
+   This file contains most of he code to process the messages from the TruePosition
    boards.
    Messages are read as available the parameters are identified
    and pocessed according to the message.
@@ -146,7 +146,7 @@ void ProcessGPSMsg() {
     gpsdoStatus.surveying = (atoi(params[0]) == 1);
     gpsdoStatus.tsats = atoi(params[1]);
     gpsdoStatus.dop = atoi(params[2]);
-    gpsdoStatus.temp = atoi(params[3]);
+    gpsdoStatus.temp = atof(params[3]);
     return;
   }
 
@@ -169,7 +169,7 @@ void ProcessGPSMsg() {
   }
   if (strcmp(&GPSmsg[1], "PPSDBG") == 0) {
     gpsdoStatus.status = atoi(params[1]);
-    gpsdoStatus.dac = atof(params[2]) * 6.25E-2;
+    gpsdoStatus.dac = atof(params[2]) * 6.25E-5;
     return;
   }
   if (strcmp(&GPSmsg[1], "SET1PPS") == 0) {

@@ -170,8 +170,8 @@ void displayStatusPage() { // General status
     u8g2.print("  DOP:"); u8g2.println(gpsdoStatus.dop);
 
     u8g2.setCursor(0, 58);
-    u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac);  u8g2.print("mV");
-    u8g2.print(" Temp:"); u8g2.println(gpsdoStatus.temp);
+    u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac,6); u8g2.print("V");
+    u8g2.print(" Temp:"); u8g2.println(gpsdoStatus.temp,2); u8g2.print("C");
   } else {
 
     /*

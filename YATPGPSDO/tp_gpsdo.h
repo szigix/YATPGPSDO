@@ -9,7 +9,7 @@
 */
 //#define DEBUG             // compile debug code
 
-#define VERSION "V1.01 2021/02/20"
+#define VERSION "V1.02 2021/02/20"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -106,11 +106,11 @@ struct STATUS {
   int tsats;                // Number of sats tracked
   bool surveying;           // Survey is in progress
   int dop;                  // DOP value
-  int temp;                 // Temperature of the unit
+  float temp;                 // Temperature of the unit
   long lat;                 // Latitude
   long lon;                 // Longitude
   int elev;                 // Elevation
-  int dac;                  // DAC value for the OCXO steering
+  float dac;                  // DAC value for the OCXO steering
   char TPversion[11];       // Version string from the TruePosition board
   uint32_t lockedSince;     // Start time of current locked status, 0 if not locked
 };
