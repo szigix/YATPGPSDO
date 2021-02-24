@@ -8,7 +8,7 @@
    Configuration section
 */
 
-#define VERSION "V1.04 2021/02/23"
+#define VERSION "V1.05 2021/02/24"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -24,8 +24,8 @@
 
 #define SERIAL_BAUD 9600      //  Serial speed: 9600
 
-#define DEBOUNCE  100         // Button debounce time in miliseconds. Shorter presses are not registred.
-#define SHORTPRESS 1000       // Limit for long button press.
+#define DEBOUNCE  40         // Button debounce time in miliseconds. Shorter presses are not registred.
+#define SHORTPRESS 500       // Limit for long button press.
 
 #define NOMSGTIME 10000       // timeout if no GPS message for 10 seconds
 #define PERIODICMSG 60000     // Position report every 60 seconds
@@ -38,7 +38,7 @@
 #define MSGMAX  60             // Max msg size in chars
 
 enum DisplayModes {STATUS, TIME, SATS, POSITION, CONFIG, ENDOFMODES};     // Display screens to flip with the Mode button
-enum MenuModes {SHOWSURVEY, SETSURVEY, SETBACKLIGHT, SETOFFSET, SAVECONFIG, LOADPOS}; // Various sub modes for the sreens
+enum MenuModes {SHOWSURVEY, SETSURVEY, SETBACKLIGHT, SETOFFSET, SAVECONFIG, TRAINO}; // Various sub modes for the sreens
 
 void ProcessGPSMsg();
 bool GetGPSMsg();
@@ -57,14 +57,10 @@ unsigned long millis();
    System comfguration
 */
 struct CONFIG {
-  long lat;                   // saved latitude
-  long lon;                   // saved longitude
-  int elev;                   // saved elevation
   int timeoffset;             // timezone settings in hours
   unsigned int surveytime;    // default survey time
   unsigned int backlight;     // backlight mode
-  int magic;                  // magic number for integrity check
-  bool saved;                 // hack for display
+  bool saved;                 // hack for displaying
 };
 
 /*
@@ -107,11 +103,12 @@ struct STATUS {
   bool surveying;           // Survey is in progress
   bool surveyed;            // survey wasrun since lt reboot
   int dop;                  // DOP value
-  float temp;                 // Temperature of the unit
+  float temp;               // Temperature of the unit
+  int phaseoffset;          // phase offset
   long lat;                 // Latitude
   long lon;                 // Longitude
   int elev;                 // Elevation
-  float dac;                  // DAC value for the OCXO steering
+  float dac;                // DAC value for the OCXO steering
   char TPversion[11];       // Version string from the TruePosition board
   uint32_t lockedSince;     // Start time of current locked status, 0 if not locked
 };

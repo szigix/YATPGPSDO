@@ -49,10 +49,10 @@ void handleButtons() {
 */
 void PressBtnMode(int len) {
   if (len < SHORTPRESS) {
-    nextDisplay();
+    nextDisplay();         // short press: go to next page
   }
   else {
-    ;                           // We don't have long press on Mode
+    displayMode=STATUS;    // long press: go to main status page
   }
 }
 
@@ -81,8 +81,8 @@ void PressBtnSel(int len) {
         switch (menuMode) {
           case SETOFFSET: menuMode = SETBACKLIGHT; break;
           case SETBACKLIGHT: menuMode = SAVECONFIG; break;
-          case SAVECONFIG: menuMode = LOADPOS; break;
-          case LOADPOS:
+          case SAVECONFIG: menuMode = TRAINO; break;
+          case TRAINO:
           default: menuMode = SETOFFSET; break;
         }
       }
@@ -100,14 +100,9 @@ void PressBtnSel(int len) {
             gpsdoConfig.saved = true;         // this is a kludge for the display
             saveConfig();
             break;
-          case LOADPOS:                       // May not need this, the TP seems to save its last position by itself anyway
-            Serial2.print("$SETPOS ");
-            Serial2.print(gpsdoConfig.lat);
-            Serial2.print(" ");
-            Serial2.print(gpsdoConfig.lon);
-            Serial2.print(" ");
-            Serial2.println(gpsdoConfig.elev);
-            displayMode = POSITION;
+          case TRAINO:                       
+            Serial2.println("$TRAINOXCO");
+            displayMode = STATUS;
             break;
         }
       }

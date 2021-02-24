@@ -167,8 +167,7 @@ void ProcessGPSMsg() {
     return;
   }
   if (strcmp(&GPSmsg[1], "PPSDBG") == 0) {
-    gpsdoStatus.status = atoi(params[1]);
-    gpsdoStatus.dac = atof(params[2]) * 6.25E-5;
+    ProcessPPSDBG(atoi(params[1]),atof(params[2]),atoi(params[3]),atoi(params[4]));
     return;
   }
   if (strcmp(&GPSmsg[1], "SET1PPS") == 0) {
@@ -204,6 +203,7 @@ void ProcessCLOCK(uint32_t ti, int leapsec, int quality) {
 
 /*
    Starightforward saving of the position data.
+   Not really used for much
 */
 void ProcessSURVEY(long lat, long lon, int elev, int stime) {
   gpsdoStatus.lat = gpsdoSurvey.lat = lat;
@@ -232,4 +232,10 @@ void ProcessGETPOS(long lat, long lon, int elev) {
   gpsdoStatus.lon = lon;
   gpsdoStatus.elev = elev;
 
+}
+
+void ProcessPPSDBG(int status, float dac, int phaseoffset, int ppsoffset){
+    gpsdoStatus.status = status;
+    gpsdoStatus.dac = dac * 6.25E-5;                // V/bit value of the DAC
+    gpsdoStatus.phaseoffset = phaseoffset;  
 }

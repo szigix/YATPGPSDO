@@ -23,7 +23,7 @@
 char *weekdays[] = {"Sunday", "Monday", "Tueday", "Wednesday", "Thursday", "Friday", "Saturday"};
 char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //  0  1  2  3
-                     "Force HO", "Soft HO", "No position", "Train XCO",       //  4  5  6  7
+                     "Force HO", "Soft HO", "No position", "Train OCXO",      //  4  5  6  7
                      "Holdover", "Init 0/6", "Init 1/6", "Init 2/6",          //  8  9 10 11
                      "Init 3/6", "Init 4/6", "Lock 1/5", "Lock 2/5",          // 12 13 14 15
                      "Lock 3/5", "Lock 4/5", "Lock 5/5", "Init 6/6",          // 16 17 18 19
@@ -166,12 +166,14 @@ void displayStatusPage() { // General status
 
     //    u8g2.setFont(u8g2_font_profont10_tf);
     u8g2.setCursor(0, 50);
-    u8g2.print("Sats:"); u8g2.print(gpsdoStatus.nsats); u8g2.print("/"); u8g2.println(gpsdoStatus.tsats);
-    u8g2.print("  DOP:"); u8g2.println(gpsdoStatus.dop);
+    u8g2.print("Sat:"); u8g2.print(gpsdoStatus.nsats); u8g2.print("/"); u8g2.print(gpsdoStatus.tsats);
+    u8g2.print(" DOP:"); u8g2.print(gpsdoStatus.dop);
+    u8g2.print(" phase:"); u8g2.print(gpsdoStatus.phaseoffset);
 
+    
     u8g2.setCursor(0, 58);
-    u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac,6); u8g2.print("V");
-    u8g2.print("  T:"); u8g2.println(gpsdoStatus.temp,2); u8g2.print("°C");
+    u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac, 6); u8g2.print("V");
+    u8g2.print(" T:"); u8g2.print(gpsdoStatus.temp, 2); u8g2.print("°C");
   } else {
 
     /*
@@ -242,7 +244,7 @@ void displayTimePage() {
    Normal sats are drawn as a circle, WAAS/EGNOS as a square.
    Again, STM32 can handle trig functions just fine.
 */
-void displaySatsPage() { 
+void displaySatsPage() {
   int i, row;
   int x, y, r;
   u8g2.clearBuffer();
@@ -284,7 +286,7 @@ void displaySatsPage() {
   u8g2.drawCircle(32, 32, 10, U8G2_DRAW_ALL);
   u8g2.drawVLine(32, 0, 64);
   u8g2.drawHLine(0, 32, 64);
-
+  u8g2.drawTriangle(32, 0, 29, 6, 35, 6);
   u8g2.sendBuffer();
 }
 
@@ -336,7 +338,7 @@ void displayPosPage() {
   u8g2.print(gpsdoStatus.nsats);
   u8g2.print("/");
   u8g2.println(gpsdoStatus.tsats);
-  
+
   u8g2.setCursor(0, 60);
   u8g2.setFont(u8g2_font_profont10_tf);
   if (menuMode == SHOWSURVEY) {
@@ -389,8 +391,9 @@ void displayConfigPage() {
     u8g2.print("Saved");
 
   u8g2.setCursor(00, 44);
-  u8g2.print(menuMode == LOADPOS ? ">" : " ");
-  u8g2.print("Load last position");
+  u8g2.print(menuMode == TRAINO ? ">" : " ");
+  u8g2.print("Train OCXO");
+
   u8g2.setCursor(00, 63);
   u8g2.print("Uptime: ");
   printInterval(millis() / 1000);

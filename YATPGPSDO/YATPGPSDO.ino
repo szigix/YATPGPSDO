@@ -234,8 +234,7 @@ void handleLEDs() {
       digitalWrite(LED_LOCK, blink ? LOW : HIGH);
       digitalWrite(LED_HOLDOVER, HIGH);
       break;
-    default:  digitalWrite(LED_ALARM, blink ? LOW : HIGH); // anything else is a strange situation
-
+    default:  ;
   }
 
   /*
@@ -262,10 +261,7 @@ void handleLEDs() {
 void saveConfig() {
   int i;
   byte *p;
-  gpsdoConfig.magic = 0x1ea7;
-  gpsdoConfig.lat = gpsdoStatus.lat;
-  gpsdoConfig.lon = gpsdoStatus.lon;
-  gpsdoConfig.elev = gpsdoStatus.elev;
+
   p = (byte*)&gpsdoConfig;
   for (i = 0; i < sizeof(struct CONFIG); i++) {
     EEPROM.update(i, *p++);
@@ -285,8 +281,6 @@ void readConfig() {
   for (i = 0; i < sizeof(struct CONFIG); i++) {
     *p++ = EEPROM.read(i);
   }
-  if (conf.magic != 0x1ea7)
-    return;
   if (conf.timeoffset > 12 || conf.timeoffset < -12)
     conf.timeoffset = 0;
   if (conf.backlight > 2)
