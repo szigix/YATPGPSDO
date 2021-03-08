@@ -8,13 +8,13 @@
    Configuration section
 */
 
-#define VERSION "V1.05 2021/02/24"
+#define VERSION "V1.06 2021/03/08"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
 #define BTN_MODE  PB15       // mode button
 #define BTN_SEL   PB14       // select button
-#define LED_ONBOARD  PC13    // BluPill onboard LED - used for heartbeat indication
+#define LED_ONBOARD  PC13    // BluePill onboard LED - used for heartbeat indication
 #define LED_HOLDOVER PB6     // Yellow LED for holdover
 #define LED_LOCK  PB5        // Green LED for lock
 #define LED_ALARM PB7        // Red LED for failure

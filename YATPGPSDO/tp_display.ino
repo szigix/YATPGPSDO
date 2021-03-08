@@ -15,6 +15,7 @@
    positions are hard coded.
 
    However the U8G2 library is used so other similar sized bitmap display might be used.
+   All display realted stuff are in this file, so to use other display, make changes here.
 */
 
 /*
@@ -246,7 +247,7 @@ void displayTimePage() {
 */
 void displaySatsPage() {
   int i, row;
-  int x, y, r;
+  int x, y, r, snr;
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_profont10_tf);
   u8g2.setCursor(67, 63);
@@ -255,9 +256,12 @@ void displaySatsPage() {
   row = 6;
   for (i = 0; i < NUMSAT; i++)
     if (gpsdoSats[i].snr > 0) {
-      u8g2.setCursor(67, row);
-      u8g2.drawLine(64, row, 64, row - (gpsdoSats[i].snr - 30) / 2);      // Fix me for small and large values
-      row += 7;
+
+      snr=(gpsdoSats[i].snr - 30) / 2;      // Seems like SNR values are about in the 30-45 dB range
+      if (snr > 7) snr = 7;                 // so we transform it into the height of one row. Yes, it could be better.
+      u8g2.drawLine(64, row, 64, row - snr);
+
+      u8g2.setCursor(67, row);  
       u8g2.print(i);
       u8g2.print(":");
       u8g2.print(gpsdoSats[i].satnum);
@@ -265,14 +269,15 @@ void displaySatsPage() {
       u8g2.print(gpsdoSats[i].elevation);
       u8g2.print("/");
       u8g2.print(gpsdoSats[i].azimuth);
-
+      row += 7;
       /*
          Start graphic
       */
       r = 30 * cos(0.017453 * (gpsdoSats[i].elevation));
       x = 32 + r * cos(0.017453 * (gpsdoSats[i].azimuth - 90));
       y = 32 + r * sin(0.017453 * (gpsdoSats[i].azimuth - 90));
-      if (gpsdoSats[i].iswaas) {
+      
+      if (gpsdoSats[i].iswaas) {          // Circle for normal, box for WAAS satellites
         u8g2.drawFrame(x - 5, y - 5, 10, 10);
       } else {
         u8g2.drawCircle(x, y, 5);

@@ -8,8 +8,8 @@
   Handle the button presses. Both buttons, the mode and the select buttons
   are managed. They are debounced that is only presses longer than the DBOUNCE time are detected.
 
-  Once for the Mode andonce for the Select button, the code is identical.
-  The buttons' press fucntions are called giving the lenght of press as parameter
+  Once for the Mode and once for the Select button, the code is identical.
+  The buttons' press functions are called giving the lenght of press as parameter
 */
 
 void handleButtons() {
