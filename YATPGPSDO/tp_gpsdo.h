@@ -8,7 +8,7 @@
    Configuration section
 */
 
-#define VERSION "V1.06 2021/03/08"
+#define VERSION "V1.1 2021/04/03"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -22,8 +22,6 @@
 
 #define EEConfAddr  0x00      // Config address in EEPROM
 
-#define SERIAL_BAUD 9600      //  Serial speed: 9600
-
 #define DEBOUNCE  40         // Button debounce time in miliseconds. Shorter presses are not registred.
 #define SHORTPRESS 500       // Limit for long button press.
 
@@ -32,7 +30,7 @@
 #define BLINKTIME 500         // How fast things on the LEDs and display blink.
 #define BACKLIGTHOFF  10000   // Backlight for 10 sec in auto mode
 
-#define TIMEOFFSET  315964800L   // magic correction for the 10 years off time from the gps. My TP reports time about 10 years off
+#define TIMEOFFSET  315964800L   // Magic correction for the 10 years off time from the gps. My TP reports time about 10 years off
 
 #define NUMSAT 8               // Max number of satellites to track
 #define MSGMAX  60             // Max msg size in chars
@@ -57,10 +55,10 @@ unsigned long millis();
    System comfguration
 */
 struct CONFIG {
-  int timeoffset;             // timezone settings in hours
-  unsigned int surveytime;    // default survey time
-  unsigned int backlight;     // backlight mode
-  bool saved;                 // hack for displaying
+  int timeoffset;             // Timezone settings in hours
+  unsigned int surveytime;    // Default survey time
+  unsigned int backlight;     // Backlight mode
+  bool saved;                 // Hack for displaying ###FIX ME###
 };
 
 /*
@@ -74,18 +72,8 @@ struct CLOCK {
   int minute;
   int second;
   int weekday;
-  int quality;                // time quality reported by the GPS
+  int quality;                // Time quality reported by the GPS
   uint32_t ticks;             // Unixtime ticks
-};
-
-/*
-   Data from the SURVEY message
-*/
-struct SURVEY {
-  long lat;
-  long lon;
-  int elev;
-  int surveytime;
 };
 
 /*
@@ -100,14 +88,15 @@ struct STATUS {
   bool initialized;         // Has the TruePosition booted up?
   int nsats;                // Number of sats seen
   int tsats;                // Number of sats tracked
-  bool surveying;           // Survey is in progress
-  bool surveyed;            // survey wasrun since lt reboot
   int dop;                  // DOP value
   float temp;               // Temperature of the unit
   int phaseoffset;          // phase offset
   long lat;                 // Latitude
   long lon;                 // Longitude
   int elev;                 // Elevation
+  bool surveying;           // Survey is in progress
+  bool surveyed;            // survey was run since last reboot
+  int surveytime;           // Survey length
   float dac;                // DAC value for the OCXO steering
   char TPversion[11];       // Version string from the TruePosition board
   uint32_t lockedSince;     // Start time of current locked status, 0 if not locked

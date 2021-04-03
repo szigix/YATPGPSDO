@@ -206,10 +206,10 @@ void ProcessCLOCK(uint32_t ti, int leapsec, int quality) {
    Not really used for much
 */
 void ProcessSURVEY(long lat, long lon, int elev, int stime) {
-  gpsdoStatus.lat = gpsdoSurvey.lat = lat;
-  gpsdoStatus.lon = gpsdoSurvey.lon = lon;
-  gpsdoStatus.elev = gpsdoSurvey.elev = elev;
-  gpsdoSurvey.surveytime = stime;
+  gpsdoStatus.lat = lat;
+  gpsdoStatus.lon = lon;
+  gpsdoStatus.elev = elev;
+  gpsdoStatus.surveytime = stime;
 
 }
 

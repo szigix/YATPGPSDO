@@ -21,7 +21,7 @@
 /*
    Printable stings for date and for the TruePosition status.
 */
-char *weekdays[] = {"Sunday", "Monday", "Tueday", "Wednesday", "Thursday", "Friday", "Saturday"};
+char *weekdays[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //  0  1  2  3
                      "Force HO", "Soft HO", "No position", "Train OCXO",      //  4  5  6  7
@@ -84,7 +84,7 @@ void printTime() {
 }
 
 /*
-   Print a time lenght in DDD|HH:MM:SS format supressing
+   Print a time lenght in DDD|HH:MM.SS format supressing
    leading zero days, hours and minutes
    This also prints at the current positoion with the current font
 */
@@ -110,7 +110,7 @@ void printInterval(uint32_t secs) {
     if (minutes < 10)
       u8g2.print("0");
     u8g2.print(minutes);
-    u8g2.print(":");
+    u8g2.print(".");
   }
   if (seconds < 10)
     u8g2.print("0");
@@ -119,7 +119,7 @@ void printInterval(uint32_t secs) {
 /*
    Display general status of the unit
 */
-void displayStatusPage() { // General status
+void displayStatusPage() {
   int shour, smin, ssec;
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_profont12_tf);
@@ -171,7 +171,7 @@ void displayStatusPage() { // General status
     u8g2.print(" DOP:"); u8g2.print(gpsdoStatus.dop);
     u8g2.print(" phase:"); u8g2.print(gpsdoStatus.phaseoffset);
 
-    
+
     u8g2.setCursor(0, 58);
     u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac, 6); u8g2.print("V");
     u8g2.print(" T:"); u8g2.print(gpsdoStatus.temp, 2); u8g2.print("°C");
@@ -221,8 +221,8 @@ void displayTimePage() {
   u8g2.drawFrame(0, 57, 70, 7);
   u8g2.drawBox(1, 58, gpsdoClock.quality * 10, 5);
   /*
-     draw the analock clock. The STM32 is fast enough to simply use trigonometrics instead of look-up tables
-     or some approxiamtion. This is a pretty simple and ugly looking clock.
+     Draw the analog clock. The STM32 is fast enough to simply use trigonometrics instead of look-up tables
+     or some approximation. This is a pretty simple and ugly looking clock. A nice bitmap backround would be better.
   */
   hourdeg = (gpsdoClock.hour * 5 + gpsdoClock.minute / 12 - 15) * 0.104719755;    // magig number to convert 6 degrees to radians.
   mindeg = (gpsdoClock.minute - 15) * 0.104719755;
@@ -257,11 +257,11 @@ void displaySatsPage() {
   for (i = 0; i < NUMSAT; i++)
     if (gpsdoSats[i].snr > 0) {
 
-      snr=(gpsdoSats[i].snr - 30) / 2;      // Seems like SNR values are about in the 30-45 dB range
+      snr = (gpsdoSats[i].snr - 30) / 2;    // Seems like SNR values are about in the 30-45 dB range
       if (snr > 7) snr = 7;                 // so we transform it into the height of one row. Yes, it could be better.
       u8g2.drawLine(64, row, 64, row - snr);
 
-      u8g2.setCursor(67, row);  
+      u8g2.setCursor(67, row);
       u8g2.print(i);
       u8g2.print(":");
       u8g2.print(gpsdoSats[i].satnum);
@@ -276,7 +276,7 @@ void displaySatsPage() {
       r = 30 * cos(0.017453 * (gpsdoSats[i].elevation));
       x = 32 + r * cos(0.017453 * (gpsdoSats[i].azimuth - 90));
       y = 32 + r * sin(0.017453 * (gpsdoSats[i].azimuth - 90));
-      
+
       if (gpsdoSats[i].iswaas) {          // Circle for normal, box for WAAS satellites
         u8g2.drawFrame(x - 5, y - 5, 10, 10);
       } else {
@@ -312,7 +312,7 @@ void displayPosPage() {
   lat = gpsdoStatus.lat;
   lon = gpsdoStatus.lon;
   u8g2.setFont(u8g2_font_profont17_tf);
-  // u8g2.print("Lat: ");
+
   if (lat < 0) {
     u8g2.print("S");
     lat = -lat;
@@ -324,7 +324,7 @@ void displayPosPage() {
   u8g2.print((lat % 1000000) * 6E-5, 4);
   u8g2.print("'");
   u8g2.setCursor(0, 38);
-  //  u8g2.print("Lon: ");
+
   if (lon < 0) {
     u8g2.print("W");
     lon = -lon;
@@ -348,20 +348,20 @@ void displayPosPage() {
   u8g2.setFont(u8g2_font_profont10_tf);
   if (menuMode == SHOWSURVEY) {
     u8g2.print("Survey ");
-    u8g2.print(gpsdoSurvey.surveytime);
+    u8g2.print(gpsdoStatus.surveytime);
     u8g2.print("s remain");
   }
   else if (menuMode == SETSURVEY) {
     u8g2.print("Survey for ");
-    u8g2.print(surveySetTime);
-    u8g2.print(surveySetTime == 1 ? " hour" : " hours");
+    u8g2.print(gpsdoConfig.surveytime);
+    u8g2.print(gpsdoConfig.surveytime == 1 ? " hour" : " hours");
   }
 
   u8g2.sendBuffer();
 }
 
 /*
-   Configuration page. Select selects the items, long press chnages them.
+   Configuration page. Select selects the items, long press changes them.
    Save config to make it permanent.
 */
 void displayConfigPage() {
@@ -407,7 +407,6 @@ void displayConfigPage() {
 
 /*
    Select the page on the display mode.
-
 */
 void UpdateDisplay() {
   switch (displayMode) {

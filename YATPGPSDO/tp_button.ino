@@ -66,14 +66,14 @@ void PressBtnSel(int len) {
       if (len < SHORTPRESS) {
         if (menuMode == SHOWSURVEY)
           menuMode = SETSURVEY;
-        else if (++surveySetTime > 24)
-          surveySetTime = 1;
+        else if (++gpsdoConfig.surveytime > 24)
+          gpsdoConfig.surveytime = 1;
       }
       else {
         menuMode = SHOWSURVEY;
         refresh = true;
         Serial2.print("$SURVEY ");
-        Serial2.println(surveySetTime);
+        Serial2.println(gpsdoConfig.surveytime);
       }
       break;
     case CONFIG:

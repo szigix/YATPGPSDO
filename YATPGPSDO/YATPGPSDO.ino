@@ -24,36 +24,27 @@
 
 struct CLOCK gpsdoClock;        // Clock related data
 struct STATUS gpsdoStatus;      // Everything about the status of the GPSDO
-struct SURVEY gpsdoSurvey;      // Survey status
 struct SATS gpsdoSats[NUMSAT];  // Data on the tracked satellites
 struct ALERTS gpsdoAlerts;      // Alerts
-struct CONFIG gpsdoConfig;      // COnfiguration settings
+struct CONFIG gpsdoConfig;      // Configuration settings
 
-char GPSmsg[MSGMAX];            // buffer for TruePosition messages
+char GPSmsg[MSGMAX];            // Buffer for TruePosition messages
 
-bool refresh = false;           // do we need to redraw the display?
+bool refresh = false;           // Do we need to redraw the display?
 
-unsigned long lastMsgTime, periodicMsgTime, blinkTime, backlTime; // timers for messages, blinking and backlight
-unsigned long lastBtnModeTime, lastBtnSelTime, btnPress;          // timers for the buttons
-int lastBtnMode = 1, lastBtnSel = 1;                              // button state for the Mode and Select buttons
-enum DisplayModes displayMode = STATUS;                           // current display mode
-enum MenuModes menuMode = SETSURVEY;                              // current menu mode
-bool heartBeat = false;                                           // heart beat led
+unsigned long lastMsgTime, periodicMsgTime, blinkTime, backlTime; // Timers for messages, blinking and backlight
+unsigned long lastBtnModeTime, lastBtnSelTime, btnPress;          // Timers for the buttons
+int lastBtnMode = 1, lastBtnSel = 1;                              // Button state for the Mode and Select buttons
+enum DisplayModes displayMode = STATUS;                           // Current display mode
+enum MenuModes menuMode = SETSURVEY;                              // Current menu mode
+bool heartBeat = false;                                           // Heartbeat led
 bool initPPSDBG = false;                                          // PPSDBG command sent at init
-int surveySetTime = 1;                                            // Default survey time
-bool inAlert = false;                                             // is there any alert?
+bool inAlert = false;                                             // Is there any alert?
 bool blink;                                                       // The global blink used for any kind of blinking
 
 void setup() {
 
-  /*
-     Set up software serial port to GPSDO.
-
-     Serial2 for TruePosition communications
-
-  */
-
-  Serial2.begin(GPSDO_BAUD);
+  Serial2.begin(GPSDO_BAUD);      // GPSDO is on Serial 2. It always 9600 baud.
 
   /*
      Set up button inputs with pull-up
@@ -107,7 +98,7 @@ void loop() {
       gpsdoStatus.surveyed = false;
       initPPSDBG = false;
     }
-    
+
     /*
        We force the GPS to provide position report every PERIODICMSG time
        TruePosition normally only reports position during survey.
@@ -285,6 +276,8 @@ void readConfig() {
     conf.timeoffset = 0;
   if (conf.backlight > 2)
     conf.backlight = 1;
+  if (conf.surveytime >24)
+    conf.surveytime = 1;
   gpsdoConfig = conf;
 
 }
