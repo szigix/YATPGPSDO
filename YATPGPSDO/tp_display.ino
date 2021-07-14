@@ -15,11 +15,11 @@
    positions are hard coded.
 
    However the U8G2 library is used so other similar sized bitmap display might be used.
-   All display realted stuff are in this file, so to use other display, make changes here.
+   All display related stuff are in this file, so to use other display, make changes here.
 */
 
 /*
-   Printable stings for date and for the TruePosition status.
+   Printable strings for date and for the TruePosition status.
 */
 char *weekdays[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -42,7 +42,7 @@ uint8_t bitmap1PPS[] = {89, 140, 213, 80, 89, 136, 81, 4, 81, 24};              
 uint8_t bitmapI1PPS[] = {170, 170, 85, 84, 170, 170, 85, 84, 170, 170};           // Bad 1PPS
 uint8_t bitmapSurv1[] = {16, 16, 16, 16, 16, 254, 124, 56, 16, 254};              // Survey needed
 uint8_t bitmapSurv2[] = {16, 254, 124, 56, 16, 0, 0, 0, 0, 254};                  // Animation during survey
-uint8_t bitmapSurveyed[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};           // Location has been surveyed
+uint8_t bitmapSurveyed[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};         // Location has been surveyed
 #define clockface_width 49
 #define clockface_height 47
 uint8_t clockface_bits[] = {
@@ -196,12 +196,17 @@ void displayStatusPage() {
       printInterval(gpsdoClock.ticks - gpsdoStatus.lockedSince);
     }
 
-    //    u8g2.setFont(u8g2_font_profont10_tf);
     u8g2.setCursor(0, 50);
     u8g2.print("Sat:"); u8g2.print(gpsdoStatus.nsats); u8g2.print("/"); u8g2.print(gpsdoStatus.tsats);
-    u8g2.print(" DOP:"); u8g2.print(gpsdoStatus.dop);
-    u8g2.print(" phase:"); u8g2.print(gpsdoStatus.phaseoffset);
-
+    if (gpsdoStatus.dop > 0.0) {
+      u8g2.print(" DOP:"); u8g2.print(gpsdoStatus.dop, 2);
+    } else
+    {
+      u8g2.print (" No fix");
+    }
+    if (gpsdoStatus.phaseoffset != -253) {
+      u8g2.print(" phi:"); u8g2.print(gpsdoStatus.phaseoffset);
+    }
 
     u8g2.setCursor(0, 58);
     u8g2.print("DAC:"); u8g2.print(gpsdoStatus.dac, 6); u8g2.print("V");
@@ -256,7 +261,7 @@ void displayTimePage() {
      or some approximation. This is a pretty simple and ugly looking clock.
   */
   u8g2.drawXBM(80, 9, clockface_width, clockface_height, clockface_bits);
-  hourdeg = (gpsdoClock.hour * 5 + gpsdoClock.minute / 12 - 15) * 0.104719755;    // magig number to convert 6 degrees to radians.
+  hourdeg = (gpsdoClock.hour * 5 + gpsdoClock.minute / 12 - 15) * 0.104719755;    // magic number to convert 6 degrees to radians.
   mindeg = (gpsdoClock.minute - 15) * 0.104719755;
   secdeg = (gpsdoClock.second - 15) * 0.104719755;
   u8g2.drawLine(105, 32, 105 + 20 * cos(secdeg), 32 + 20 * sin(secdeg));
@@ -277,14 +282,15 @@ void displaySatsPage() {
   int x, y, r, snr;
   u8g2.clearBuffer();
   u8g2.setFont(u8g2_font_profont10_tf);
-  u8g2.setCursor(67, 63);
+  u8g2.setCursor(60, 63);
   u8g2.print(gpsdoStatus.nsats); u8g2.print("/"); u8g2.println(gpsdoStatus.tsats);
-  u8g2.print("  DOP:"); u8g2.println(gpsdoStatus.dop);
+  u8g2.print(" DOP:"); u8g2.println(gpsdoStatus.dop, 2);
   row = 6;
   for (i = 0; i < NUMSAT; i++)
     if (gpsdoSats[i].snr > 0) {
 
       snr = (gpsdoSats[i].snr - 30) / 2;    // Seems like SNR values are about in the 30-45 dB range
+      if (snr <0) snr = 0;
       if (snr > 7) snr = 7;                 // so we transform it into the height of one row. Yes, it could be better.
       u8g2.drawLine(64, row, 64, row - snr);
 

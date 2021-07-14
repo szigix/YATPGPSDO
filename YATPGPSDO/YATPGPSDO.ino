@@ -5,7 +5,7 @@
 
 
   Board: Generic STM32F103C series
-  Display: 128x64 ST7920 based bitmap display
+  Display: 128x64 ST7920 based bitmap display in serial mode, connected to hw spi
 
   Additional libraries: Time and U8G2
 
@@ -44,7 +44,7 @@ bool blink;                                                       // The global 
 
 void setup() {
 
-  Serial2.begin(GPSDO_BAUD);      // GPSDO is on Serial 2. It always 9600 baud.
+  Serial2.begin(GPSDO_BAUD);      // GPSDO is on Serial 2. It is always 9600 baud.
 
   /*
      Set up button inputs with pull-up
@@ -256,7 +256,6 @@ void saveConfig() {
   p = (byte*)&gpsdoConfig;
   for (i = 0; i < sizeof(struct CONFIG); i++) {
     EEPROM.update(i, *p++);
-    delay(50);
   }
 
 }

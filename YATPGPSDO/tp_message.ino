@@ -140,7 +140,7 @@ void ProcessGPSMsg() {
   if (strcmp(&GPSmsg[1], "EXTSTATUS") == 0) {
     gpsdoStatus.surveying = (atoi(params[0]) == 1);
     gpsdoStatus.tsats = atoi(params[1]);
-    gpsdoStatus.dop = atoi(params[2]);
+    gpsdoStatus.dop = atof(params[2]);
     gpsdoStatus.temp = atof(params[3]);
 
     if (!gpsdoStatus.surveyed && gpsdoStatus.surveying) {

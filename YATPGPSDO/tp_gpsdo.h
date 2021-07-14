@@ -8,7 +8,7 @@
    Configuration section
 */
 
-#define VERSION "V1.11 2021/07/06"
+#define VERSION "V1.12 2021/07/14"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -88,14 +88,14 @@ struct STATUS {
   bool initialized;         // Has the TruePosition booted up?
   int nsats;                // Number of sats seen
   int tsats;                // Number of sats tracked
-  int dop;                  // DOP value
+  float dop;                // DOP value
   float temp;               // Temperature of the unit
-  int phaseoffset;          // phase offset
+  int phaseoffset;          // Phase offset
   long lat;                 // Latitude
   long lon;                 // Longitude
   int elev;                 // Elevation
   bool surveying;           // Survey is in progress
-  bool surveyed;            // survey was run since last reboot
+  bool surveyed;            // Survey was run since last reboot
   int surveytime;           // Survey length
   float dac;                // DAC value for the OCXO steering
   char TPversion[11];       // Version string from the TruePosition board
@@ -103,10 +103,9 @@ struct STATUS {
 };
 
 /*
-   data on satellites
+   Data on satellites
 */
 struct SATS {
-  int chanel;               // Which channel is it tracked on
   int satnum;               // Satellite PRN number
   int elevation;            // Elevation in degrees
   int azimuth;              // Azimuth in degrees
