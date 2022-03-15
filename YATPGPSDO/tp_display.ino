@@ -27,8 +27,8 @@ char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //
                      "Force HO", "Soft HO", "No position", "Train OCXO",      //  4  5  6  7
                      "Holdover", "Init 0/6", "Init 1/6", "Init 2/6",          //  8  9 10 11
                      "Init 3/6", "Init 4/6", "Lock 1/5", "Lock 2/5",          // 12 13 14 15
-                     "Lock 3/5", "Lock 4/5", "Lock 5/5", "Init 6/6",          // 16 17 18 19
-                     "Acquire 1/3", "Acquire 2/3", "Acquire 3/3", "23"        // 20 21 22 23
+                     "Lock 3/5", "Lock 4/5", "Lock 5/5", "Initializing",      // 16 17 18 19
+                     "Acquire 1/3", "Acquire 2/3", "Acquire 3/3", " "         // 20 21 22 23
                     };
 
 /*

@@ -86,7 +86,7 @@ void ProcessGPSMsg() {
   if (strcmp(&GPSmsg[1], "GETVER") == 0) {
     if (strcmp(params[1], "BOOT") == 0) {
       Serial2.println("$PROCEED");
-   
+
       gpsdoStatus.TPversion[0] = 0;
       strncpy(gpsdoStatus.TPversion, params[0], 10);
       gpsdoStatus.TPversion[10] = 0;
@@ -119,11 +119,17 @@ void ProcessGPSMsg() {
      in this loop or via calling a function to process.
   */
 
+  /*
+     $CLOCK Unixtime Leapsecs Merit
+  */
   if (strcmp(&GPSmsg[1], "CLOCK") == 0) {
     ProcessCLOCK(atol(params[0]), atoi(params[1]), atoi(params[2]));
     return;
   }
 
+  /*
+     $STATUS 10Mhz 1pps Antenna Holdovertime NumSats Status
+  */
   if (strcmp(&GPSmsg[1], "STATUS") == 0) {
 
     gpsdoStatus.initialized = true;                           // after first STATUS we consider the GPSDO fully initilaized and working
@@ -137,6 +143,9 @@ void ProcessGPSMsg() {
     return;
   }
 
+  /*
+     $EXTSTATUS Surveying NumSats DOP Temp Discardcount
+  */
   if (strcmp(&GPSmsg[1], "EXTSTATUS") == 0) {
     gpsdoStatus.surveying = (atoi(params[0]) == 1);
     gpsdoStatus.tsats = atoi(params[1]);
@@ -144,30 +153,46 @@ void ProcessGPSMsg() {
     gpsdoStatus.temp = atof(params[3]);
 
     if (!gpsdoStatus.surveyed && gpsdoStatus.surveying) {
-      gpsdoStatus.surveyed=true;
+      gpsdoStatus.surveyed = true;
     }
     return;
   }
 
+  /*
+     $SURVEY Lat Lon Elev Elevcorrection RemainingTime
+  */
   if (strcmp(&GPSmsg[1], "SURVEY") == 0) {
     ProcessSURVEY(atol(params[0]), atol(params[1]), atoi(params[2]), atoi(params[4]));
     return;
   }
 
+  /*
+     $SAT Channel Satnumber Elev Azimuth SNR
+  */
   if (strcmp(&GPSmsg[1], "SAT") == 0) {
     ProcessSAT(atoi(params[0]), atoi(params[1]), atoi(params[2]), atoi(params[3]), atoi(params[4]), false);
     return;
   }
+
+  /*
+    $WSAT Channel Satnumber Elev Azimuth SNR
+  */
   if (strcmp(&GPSmsg[1], "WSAT") == 0) {
     ProcessSAT(atoi(params[0]), atoi(params[1]), atoi(params[2]), atoi(params[3]), atoi(params[4]), true);
     return;
   }
+  /*
+    $GETPOS Lon Lat Elev Elevcorr Traim
+  */
   if (strcmp(&GPSmsg[1], "GETPOS") == 0) {
     ProcessGETPOS(atol(params[0]), atol(params[1]), atoi(params[2]));
     return;
   }
+  /*
+    $PPSDBG Time Status DAC Phase PPSoffset PPSstatus Traim status 0.0
+  */
   if (strcmp(&GPSmsg[1], "PPSDBG") == 0) {
-    ProcessPPSDBG(atoi(params[1]),atof(params[2]),atoi(params[3]),atoi(params[4]));
+    ProcessPPSDBG(atoi(params[1]), atof(params[2]), atoi(params[3]), atoi(params[4]));
     return;
   }
   if (strcmp(&GPSmsg[1], "SET1PPS") == 0) {
@@ -234,8 +259,8 @@ void ProcessGETPOS(long lat, long lon, int elev) {
 
 }
 
-void ProcessPPSDBG(int status, float dac, int phaseoffset, int ppsoffset){
-    gpsdoStatus.status = status;
-    gpsdoStatus.dac = dac * 6.25E-5;                // V/bit value of the DAC
-    gpsdoStatus.phaseoffset = phaseoffset;  
+void ProcessPPSDBG(int status, float dac, int phaseoffset, int ppsoffset) {
+  gpsdoStatus.status = status;
+  gpsdoStatus.dac = dac * 6.25E-5;                // V/bit value of the DAC
+  gpsdoStatus.phaseoffset = phaseoffset;
 }
