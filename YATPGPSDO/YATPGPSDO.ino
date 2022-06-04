@@ -33,6 +33,7 @@ char GPSmsg[MSGMAX];            // Buffer for TruePosition messages
 bool refresh = false;           // Do we need to redraw the display?
 
 unsigned long lastMsgTime, periodicMsgTime, blinkTime, backlTime; // Timers for messages, blinking and backlight
+unsigned long popupTimer;                                         // Timer for the popup message box;
 unsigned long lastBtnModeTime, lastBtnSelTime, btnPress;          // Timers for the buttons
 int lastBtnMode = 1, lastBtnSel = 1;                              // Button state for the Mode and Select buttons
 enum DisplayModes displayMode = STATUS;                           // Current display mode
@@ -41,6 +42,7 @@ bool heartBeat = false;                                           // Heartbeat l
 bool initPPSDBG = false;                                          // PPSDBG command sent at init
 bool inAlert = false;                                             // Is there any alert?
 bool blink;                                                       // The global blink used for any kind of blinking
+bool popupShown = false;                                          // Is there any popup displayed?
 
 void setup() {
 
@@ -118,6 +120,15 @@ void loop() {
       blink = !blink;
       refresh = true;
       digitalWrite(LED_ONBOARD, blink ? HIGH : LOW);
+    }
+
+    /*
+      Do the popup timer
+    */
+    if (popupShown) {
+      if (millis() - popupTimer > POPUPDURATION) {
+        popupShown = false;
+      }
     }
 
     /*
@@ -275,7 +286,7 @@ void readConfig() {
     conf.timeoffset = 0;
   if (conf.backlight > 2)
     conf.backlight = 1;
-  if (conf.surveytime >24)
+  if (conf.surveytime > 24)
     conf.surveytime = 1;
   gpsdoConfig = conf;
 

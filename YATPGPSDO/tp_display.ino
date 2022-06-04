@@ -21,31 +21,31 @@
 /*
    Printable strings for date and for the TruePosition status.
 */
-char *weekdays[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //  0  1  2  3
-                     "Force HO", "Soft HO", "No position", "Train OCXO",      //  4  5  6  7
-                     "Holdover", "Init 0/6", "Init 1/6", "Init 2/6",          //  8  9 10 11
-                     "Init 3/6", "Init 4/6", "Lock 1/5", "Lock 2/5",          // 12 13 14 15
-                     "Lock 3/5", "Lock 4/5", "Lock 5/5", "Initializing",      // 16 17 18 19
-                     "Acquire 1/3", "Acquire 2/3", "Acquire 3/3", " "         // 20 21 22 23
-                    };
+const char *weekdays[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+const char *gpsstatus[] = {"Locked", "Acquisition", "Init 5/6", "Holdover",         //  0  1  2  3
+                           "Force HO", "Soft HO", "No position", "Train OCXO",      //  4  5  6  7
+                           "Holdover", "Init 0/6", "Init 1/6", "Init 2/6",          //  8  9 10 11
+                           "Init 3/6", "Init 4/6", "Lock 1/5", "Lock 2/5",          // 12 13 14 15
+                           "Lock 3/5", "Lock 4/5", "Lock 5/5", "Initializing",      // 16 17 18 19
+                           "Acquire 1/3", "Acquire 2/3", "Acquire 3/3", " "         // 20 21 22 23
+                          };
 
 /*
    Various bitmaps for the status bar on the main page
 */
-uint8_t bitmapAnt[] = {16, 146, 84, 56, 16, 16, 16, 16, 16, 16, 0};              // Antenna symbol
-uint8_t bitmapIAnt[] = {170, 84, 170, 84, 170, 84, 170, 84, 170, 84, 170};        // Checkerboard for antenna error
-uint8_t bitmap10MHz[] = {73, 84, 0, 213, 213, 224, 85, 92, 64, 85, 84, 128, 73, 85, 224};       // 10Mhz
-uint8_t bitmapI10MHz[] = {170, 170, 170, 85, 85, 85, 170, 170, 170, 85, 85, 85, 170, 170, 170}; // Bad 10Mhz
-uint8_t bitmap1PPS[] = {89, 140, 213, 80, 89, 136, 81, 4, 81, 24};                // 1 PPS
-uint8_t bitmapI1PPS[] = {170, 170, 85, 84, 170, 170, 85, 84, 170, 170};           // Bad 1PPS
-uint8_t bitmapSurv1[] = {16, 16, 16, 16, 16, 254, 124, 56, 16, 254};              // Survey needed
-uint8_t bitmapSurv2[] = {16, 254, 124, 56, 16, 0, 0, 0, 0, 254};                  // Animation during survey
-uint8_t bitmapSurveyed[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};         // Location has been surveyed
+const uint8_t bitmapAnt[] = {16, 146, 84, 56, 16, 16, 16, 16, 16, 16, 0};              // Antenna symbol
+const uint8_t bitmapIAnt[] = {170, 84, 170, 84, 170, 84, 170, 84, 170, 84, 170};        // Checkerboard for antenna error
+const uint8_t bitmap10MHz[] = {73, 84, 0, 213, 213, 224, 85, 92, 64, 85, 84, 128, 73, 85, 224};       // 10Mhz
+const uint8_t bitmapI10MHz[] = {170, 170, 170, 85, 85, 85, 170, 170, 170, 85, 85, 85, 170, 170, 170}; // Bad 10Mhz
+const uint8_t bitmap1PPS[] = {89, 140, 213, 80, 89, 136, 81, 4, 81, 24};                // 1 PPS
+const uint8_t bitmapI1PPS[] = {170, 170, 85, 84, 170, 170, 85, 84, 170, 170};           // Bad 1PPS
+const uint8_t bitmapSurv1[] = {16, 16, 16, 16, 16, 254, 124, 56, 16, 254};              // Survey needed
+const uint8_t bitmapSurv2[] = {16, 254, 124, 56, 16, 0, 0, 0, 0, 254};                  // Animation during survey
+const uint8_t bitmapSurveyed[] = {56, 108, 198, 238, 254, 124, 56, 56, 16, 16};         // Location has been surveyed
 #define clockface_width 49
 #define clockface_height 47
-uint8_t clockface_bits[] = {
+const uint8_t clockface_bits[] = {
   0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x80, 0x03, 0x00,
   0x00, 0x00, 0x00, 0x00, 0xf0, 0x1f, 0x00, 0x00, 0x00, 0x00, 0x00, 0x8f,
   0xe3, 0x01, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x01, 0x06, 0x00, 0x00, 0x00,
@@ -75,6 +75,7 @@ uint8_t clockface_bits[] = {
   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
   0x00, 0x01, 0x00, 0x00, 0x00
 };
+char popupText[POPUPLEN];
 /*
    Initialize the display. It is in HW SPI mode, so uses the HW SPI pins
    PA4 is used for CS and PB0 is connected as resert.
@@ -146,6 +147,18 @@ void printInterval(uint32_t secs) {
   if (seconds < 10)
     u8g2.print("0");
   u8g2.print(seconds);
+}
+
+/*
+  Display popup message
+*/
+void displayPopup() {
+  if (popupShown) {
+    u8g2.setDrawColor(0);
+    u8g2.drawBox(16, 16, 96, 32);
+    u8g2.setDrawColor(1);
+    u8g2.drawButtonUTF8(64, 32, U8G2_BTN_HCENTER | U8G2_BTN_BW1 | U8G2_BTN_SHADOW1, 0, 2, 2, popupText);
+  }
 }
 /*
    Display general status of the unit
@@ -225,6 +238,7 @@ void displayStatusPage() {
     u8g2.drawStr(10, 52, VERSION);
     u8g2.drawStr(10, 62, gpsdoStatus.TPversion);
   }
+  displayPopup();
   u8g2.sendBuffer();
 }
 
@@ -259,7 +273,7 @@ void displayTimePage() {
   /*
      Draw the analog clock. The STM32 is fast enough to simply use trigonometrics instead of look-up tables
      or some approximation. This is a pretty simple and ugly looking clock. No attempt was made to use parameters for the clock.
-     A bitmap clockface is used and coordinates are hardcoded into the code. 
+     A bitmap clockface is used and coordinates are hardcoded into the code.
   */
   u8g2.drawXBM(80, 9, clockface_width, clockface_height, clockface_bits);
   hourdeg = (gpsdoClock.hour * 5 + gpsdoClock.minute / 12 - 15) * 0.104719755;    // magic number to convert 6 degrees to radians.
@@ -269,6 +283,7 @@ void displayTimePage() {
   u8g2.drawLine(104, 32, 104 + 18 * cos(mindeg) + 0.5, 32 + 18 * sin(mindeg) + 0.5);
   u8g2.drawLine(104, 32, 104 + 13 * cos(hourdeg) + 0.5, 32 + 13 * sin(hourdeg) + 0.5);
 
+  displayPopup();
   u8g2.sendBuffer();
 }
 
@@ -326,6 +341,8 @@ void displaySatsPage() {
   u8g2.drawVLine(32, 0, 64);
   u8g2.drawHLine(0, 32, 64);
   u8g2.drawTriangle(32, 0, 29, 6, 35, 6);
+
+  displayPopup();
   u8g2.sendBuffer();
 }
 
@@ -390,7 +407,7 @@ void displayPosPage() {
     u8g2.print(gpsdoConfig.surveytime);
     u8g2.print(gpsdoConfig.surveytime == 1 ? " hour" : " hours");
   }
-
+  displayPopup();
   u8g2.sendBuffer();
 }
 
@@ -426,8 +443,6 @@ void displayConfigPage() {
   u8g2.setCursor(00, 36);
   u8g2.print(menuMode == SAVECONFIG ? ">" : " ");
   u8g2.print("Save config ");
-  if (gpsdoConfig.saved)
-    u8g2.print("Saved");
 
   u8g2.setCursor(00, 44);
   u8g2.print(menuMode == TRAINO ? ">" : " ");
@@ -436,6 +451,7 @@ void displayConfigPage() {
   u8g2.setCursor(00, 63);
   u8g2.print("Uptime: ");
   printInterval(millis() / 1000);
+  displayPopup();
   u8g2.sendBuffer();
 }
 
@@ -474,11 +490,19 @@ void nextDisplay() {
       break;
     case POSITION: displayMode = CONFIG;
       menuMode = SETOFFSET;
-      gpsdoConfig.saved = false;
       break;
     case CONFIG: displayMode = STATUS;
       break;
     default: displayMode = STATUS;
   }
   refresh = true;                     // redraw
+  popupShown = false;
+}
+
+void showPopup(const char *text) {
+  popupTimer = millis();
+  popupShown = true;
+  refresh = true;
+  memset(popupText,0,POPUPLEN);
+  strncpy(popupText, text, POPUPLEN-1);
 }

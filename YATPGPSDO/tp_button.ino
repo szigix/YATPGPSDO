@@ -52,7 +52,7 @@ void PressBtnMode(int len) {
     nextDisplay();         // short press: go to next page
   }
   else {
-    displayMode=STATUS;    // long press: go to main status page
+    displayMode = STATUS;  // long press: go to main status page
   }
 }
 
@@ -72,6 +72,7 @@ void PressBtnSel(int len) {
       else {
         menuMode = SHOWSURVEY;
         refresh = true;
+        showPopup("Survey start");
         Serial2.print("$SURVEY ");
         Serial2.println(gpsdoConfig.surveytime);
       }
@@ -97,11 +98,12 @@ void PressBtnSel(int len) {
               gpsdoConfig.backlight = 0;
             break;
           case SAVECONFIG:
-            gpsdoConfig.saved = true;         // this is a kludge for the display
+            showPopup("Config saved");
             saveConfig();
             break;
-          case TRAINO:                       
+          case TRAINO:
             Serial2.println("$TRAINOXCO");
+            showPopup("Train OCXO");
             displayMode = STATUS;
             break;
         }

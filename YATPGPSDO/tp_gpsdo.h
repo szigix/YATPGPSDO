@@ -8,7 +8,7 @@
    Configuration section
 */
 
-#define VERSION "V1.14 2022/04/09"
+#define VERSION "V1.15 2022/06/04"
 
 #define GPSDO_BAUD  9600     // GPSDO serial speed: 9600 do not change
 
@@ -29,6 +29,8 @@
 #define PERIODICMSG 60000     // Position report every 60 seconds
 #define BLINKTIME 500         // How fast things on the LEDs and display blink.
 #define BACKLIGTHOFF  10000   // Backlight for 10 sec in auto mode
+#define POPUPDURATION 5000    // Duration of popup messages
+#define POPUPLEN  13          // Max popup text length
 
 #define TIMEOFFSET  315964800L   // Magic correction for the 10 years off time from the gps. My TP reports time about 10 years off
 
@@ -48,6 +50,7 @@ void PressBtnMode(int);
 void PressBtnSel(int);
 void handleLEDs();
 void nextDisplay();
+void showPopup(const char* text1, const char* text2);
 
 unsigned long millis();
 
@@ -58,7 +61,6 @@ struct CONFIG {
   int timeoffset;             // Timezone settings in hours
   unsigned int surveytime;    // Default survey time
   unsigned int backlight;     // Backlight mode
-  bool saved;                 // Hack for displaying ###FIX ME###
 };
 
 /*
