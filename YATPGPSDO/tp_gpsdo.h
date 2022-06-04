@@ -50,7 +50,7 @@ void PressBtnMode(int);
 void PressBtnSel(int);
 void handleLEDs();
 void nextDisplay();
-void showPopup(const char* text1, const char* text2);
+void showPopup(const char* text);
 
 unsigned long millis();
 
